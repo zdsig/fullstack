@@ -10,7 +10,7 @@
     "backend",
     "fullstack"
   ],
-  "type": "module",
+  "type":"module",
   "author": "Val Lima",
   "license": "ISC",
   "description": "Api nodejs to do list",

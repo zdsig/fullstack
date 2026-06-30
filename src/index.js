@@ -1,66 +1,122 @@
-// importando o modulo express
 import express from "express";
 import dotenv from "dotenv";
 
-// adicionando as configurações do dotenv
 dotenv.config();
 
-// inicialiazar a aplicação express, construir a aplicação
 const app = express();
 
-// todo server tem uma porta ou portas
+app.use(express.json())
+
+
 const port = process.env.PORTA;
 
-const produtos = [
-  {
-    matricula: 1,
-    nome: "Coxinha",
-    email: 4.99,
-  },
-];
+const eventos = [];
 
-// Endpoint responsavel por listar todos os produtos
+
 app.get("/listar", (requisicao, resposta) => {
-  // tratamento de exceção
+
   try {
-    if (produtos.length === 0) {
+    if (eventos.length === 0) {
       return resposta
         .status(200)
-        .json({ mensagem: "Nenhum produto cadastrado!" });
+        .json({ mensagem: "Nenhum evento cadastrado!" });
     }
-    resposta.status(200).json(produtos);
+    resposta.status(200).json(eventos);
   } catch (error) {
-    resposta.status(500).json({ mensagem: "Erro ao listar os produtos!" });
+    resposta.status(500).json({ mensagem: "Erro ao listar eventos!", erro: error });
   }
 });
 
-// Endpoint responsavel por listar um produto por id
-app.get("/listar/:id", (requisicao, resposta) => {
+
+app.get("/listar/:codigo", (requisicao, resposta) => {
   try {
-    const id = parseInt(requisicao.params.id);
-    const produto = produtos.find(produto => produto.id === id);
-    if (!produto) {
-      return resposta.status(404).json({ mensagem: "Produto não encontrado!" });
+    const codigo = (requisicao.params.codigo);
+    const eventos = eventos.find(evento => evento.codigo === codigo);
+    if (!evento) {
+      return resposta.status(404).json({ mensagem: "evento não encontrado!" });
     }
-    resposta.status(200).json(produto);
+    resposta.status(200).json(evento);
   } catch (error) {
-    resposta.status(500).json({ mensagem: "Erro ao buscar o produto!" });
+    resposta.status(500).json({ mensagem: "Erro ao buscar eventos agendados!" });
   }
 });
 
-// Endpoint responsavel por cadastrar produtos
-app.post("/cadastrar", (requisicao, resposta) => {});
+s
+app.post("/cadastrar", (requisicao, resposta) => {
+  try {
+    const { codigo, nome, descricao, local, data, horario, organizador, quantidadeVagas } = requisicao.body
 
-// Endpoint responsavel por atualizar todos os dados de um produto
-app.put("/editar", (requisicao, resposta) => {});
+    const dados = { codigo, nome, descricao, local, data, horario, organizador, quantidadeVagas }
 
-// Endpoint responsavel por excluir todos os produtos
-app.delete("/excluir", (requisicao, resposta) => {});
+    if (!codigo || !nome || !descricao || !local || !data || !horario || !organizador || !quantidadeVagas) {
+      return resposta.status(400).json({ mensagem: "Todos os campos são obrigatorios!" })
+    }
+    alunos.push(dados)
+    resposta.status(201).json({ mensagem: "Evento Agendado com sucesso!" })
+  } catch (error) {
+    resposta.status(500).json({ mensagem: "Erro ao Agendar Evento!", erro: error })
+  };
 
-// Endpoint responsavel por excluir um produto por id
-app.delete("/excluir", (requisicao, resposta) => {});
+});
 
-// minha aplicação ouvindo a porta 3000
+
+
+app.put("/editar/:codigo", (requisicao, resposta) => {
+  try {
+    const codigo = requisicao.params.codigo
+    const evento = eventos.find(evento => evento.codigo === codigo)
+    if (!aluno) {
+      return resposta.status(400).json({ mensagem: "evento não Encontrado!" })
+    }
+
+    const { NovoNome, NovaDescricao, NovoLocal, NovaData, NovoHorario, NovoOrganizador, NovaQuantidadeVagas } = requisicao.body
+
+    if (NovaDescricao || NovoNome || NovoLocal || NovaData || NovoHorario || NovoOrganizador || NovaQuantidadeVagas) {
+      return resposta.status(400).json({ mensagem: "Todos os campos prescisam estar preenchidos!" })
+    };
+
+    evento.nome = NovoNome
+    evento.descricao = NovaDescricao
+    evento.local = NovoLocal
+    evento.data = NovaData
+    evento.horario = NovoHorario
+    evento.organizador = NovoOrganizador
+    evento.quantidadeVagas = NovaQuantidadeVagas
+    resposta.status(200).json({ mensagem: "Evento Editado com sucesso!" })
+
+  } catch (error) {
+    resposta.status(500).json({ mensagem: "Erro ao editar Evento!", erro: error })
+  }
+});
+
+
+app.delete("/excluir/todos", (requisicao, resposta) => {
+  try {
+    eventos.length = 0
+    resposta.status(200).json({ mensagem: "Todos os Eventos foram excluidos!" })
+  } catch (error) {
+    resposta.status(500).json({ mensagem: "Erro ao exluir Eventos", erro: error })
+  }
+});
+
+
+app.delete("/excluir/:codigo", (requisicao, resposta) => {
+  try {
+    const codigo = requisicao.params.codigo
+    const index = eventos.findIndex(evento => evento.codigo === codigo)
+    if (index === -1) {
+      return resposta.status(400).json({ mensagem: "Evento não Encontrado!" })
+    }
+    eventos.splice(index, 1)
+    resposta.status(200).json({ mensagem: " Evento excluido!" })
+  } catch (error) {
+    resposta.status(500).json({ mensagem: "Erro ao exluir Evento", erro: error })
+  }
+
+
+});
+
+
 app.listen(port, () => {
   console.log(`Servidor executando em http://localhost:${port}`);
 });
