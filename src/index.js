@@ -12,11 +12,15 @@ const port = process.env.PORTA;
 
 const eventos = []
 
-app.get("/",(requisicao,resposta)=>{
+app.get("/", (requisicao,resposta) =>{
 try {
-  resposta.status(200).json({mensagem:"API funcionando com sucesso!", status: "ok", date: new Date.now() })
+  resposta.status(200).json({  
+  mensagem:"API funcionando com sucesso!", 
+  status: "ok", 
+  date: new Date ().toLocaleString("pt-BR", {timeZone: "America/Recife"}) 
+})
 } catch (error) {
-  resposta.status(500).json({ mensagem: "Erro ao subir o servidor!", erro: error });
+  resposta.status(500).json({ mensagem: "Erro ao subir o servidor!", erro: error.mensagem });
 }
 
 })
