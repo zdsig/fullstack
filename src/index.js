@@ -41,17 +41,17 @@ app.get("/listar/:codigo", (requisicao, resposta) => {
   }
 });
 
-s
+
 app.post("/cadastrar", (requisicao, resposta) => {
   try {
     const { codigo, nome, descricao, local, data, horario, organizador, quantidadeVagas } = requisicao.body
 
     const dados = { codigo, nome, descricao, local, data, horario, organizador, quantidadeVagas }
 
-    if (!codigo || !nome || !descricao || !local || !data || !horario || !organizador || !quantidadeVagas) {
+    if (!codigo || !nome || !organizador ) {
       return resposta.status(400).json({ mensagem: "Todos os campos são obrigatorios!" })
     }
-    alunos.push(dados)
+    eventos.push(dados)
     resposta.status(201).json({ mensagem: "Evento Agendado com sucesso!" })
   } catch (error) {
     resposta.status(500).json({ mensagem: "Erro ao Agendar Evento!", erro: error })
@@ -60,18 +60,40 @@ app.post("/cadastrar", (requisicao, resposta) => {
 });
 
 
-
-app.put("/editar/:codigo", (requisicao, resposta) => {
+app.patch("/editar/:codigo", (requisicao, resposta) =>  {
   try {
     const codigo = requisicao.params.codigo
     const evento = eventos.find(evento => evento.codigo === codigo)
-    if (!aluno) {
+    if(!evento){
+      return resposta.status(400).json({mensagem: "Evento não encontrado!"})
+    }
+    const { NovoNome,NovaDescricao,NovoLocal,NovaData,NovoHorario,NovoOrganizador,NovaQuantidadeVagas} = requisicao.body
+    
+    evento.nome = NovoNome|| evento.nome
+    evento.descricao = NovaDescricao || evento.descricao
+    evento.local = NovoLocal || evento.local
+    evento.data = NovaData ||  evento.data
+    evento.horario = NovoHorario || evento.horario
+    evento.organizador = NovoOrganizador ||  evento.organizador
+    evento.quantidadeVagas = NovaQuantidadeVagas ||  evento.quantidadeVagas
+
+    resposta.status(200).json({mensagem: "evento atualizado com sucesso!"})
+  } catch (error) {
+    resposta.status(500).json({mensagem: "Erro ao editar evento!", erro: error})
+  }
+})
+
+app.put("/editar/todos/:codigo", (requisicao, resposta) => {
+  try {
+    const codigo = requisicao.params.codigo
+    const evento = eventos.find(evento => evento.codigo === codigo)
+    if (!evento) {
       return resposta.status(400).json({ mensagem: "evento não Encontrado!" })
     }
 
     const { NovoNome, NovaDescricao, NovoLocal, NovaData, NovoHorario, NovoOrganizador, NovaQuantidadeVagas } = requisicao.body
 
-    if (NovaDescricao || NovoNome || NovoLocal || NovaData || NovoHorario || NovoOrganizador || NovaQuantidadeVagas) {
+    if (!NovaDescricao || !NovoNome || !NovoLocal || !NovaData || !NovoHorario || !NovoOrganizador || !NovaQuantidadeVagas) {
       return resposta.status(400).json({ mensagem: "Todos os campos prescisam estar preenchidos!" })
     };
 
