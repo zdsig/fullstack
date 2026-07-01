@@ -10,7 +10,16 @@ app.use(express.json())
 
 const port = process.env.PORTA;
 
-const eventos = [];
+const eventos = []
+
+app.get("/",(requisicao,resposta)=>{
+try {
+  resposta.status(200).json({mensagem:"API funcionando com sucesso!", status: "ok", date: new Date.now() })
+} catch (error) {
+  resposta.status(500).json({ mensagem: "Erro ao listar eventos!", erro: error });
+}
+
+})
 
 
 app.get("/listar", (requisicao, resposta) => {
@@ -65,17 +74,17 @@ app.patch("/editar/:codigo", (requisicao, resposta) =>  {
     const codigo = requisicao.params.codigo
     const evento = eventos.find(evento => evento.codigo === codigo)
     if(!evento){
-      return resposta.status(400).json({mensagem: "Evento não encontrado!"})
+      return resposta.status(404).json({mensagem: "Evento não encontrado!"})
     }
-    const { NovoNome,NovaDescricao,NovoLocal,NovaData,NovoHorario,NovoOrganizador,NovaQuantidadeVagas} = requisicao.body
-    
-    evento.nome = NovoNome|| evento.nome
-    evento.descricao = NovaDescricao || evento.descricao
-    evento.local = NovoLocal || evento.local
-    evento.data = NovaData ||  evento.data
-    evento.horario = NovoHorario || evento.horario
-    evento.organizador = NovoOrganizador ||  evento.organizador
-    evento.quantidadeVagas = NovaQuantidadeVagas ||  evento.quantidadeVagas
+    const { novoNome,novaDescricao,novoLocal,novaData,novoHorario,novoOrganizador,novaquantidadeVagas} = requisicao.body
+  n
+    evento.nome = novoNome|| evento.nome
+    evento.descricao = novaDescricao || evento.descricao
+    evento.local = novoLocal || evento.local
+    evento.data = novaData ||  evento.data
+    evento.horario = novoHorario || evento.horario
+    evento.organizador = novoOrganizador ||  evento.organizador
+    evento.quantidadeVagas = novaquantidadeVagas ||  evento.quantidadeVagas
 
     resposta.status(200).json({mensagem: "evento atualizado com sucesso!"})
   } catch (error) {
@@ -88,22 +97,22 @@ app.put("/editar/todos/:codigo", (requisicao, resposta) => {
     const codigo = requisicao.params.codigo
     const evento = eventos.find(evento => evento.codigo === codigo)
     if (!evento) {
-      return resposta.status(400).json({ mensagem: "evento não Encontrado!" })
+      return resposta.status(404).json({ mensagem: "evento não Encontrado!" })
     }
 
-    const { NovoNome, NovaDescricao, NovoLocal, NovaData, NovoHorario, NovoOrganizador, NovaQuantidadeVagas } = requisicao.body
+    const { novoNome, novaDescricao, novoLocal, novaData, novoHorario, novoOrganizador, novaquantidadeVagas } = requisicao.body
 
-    if (!NovaDescricao || !NovoNome || !NovoLocal || !NovaData || !NovoHorario || !NovoOrganizador || !NovaQuantidadeVagas) {
+    if (!novaDescricao || !novoNome || !novoLocal || !novaData || !novoHorario || !novoOrganizador || !novaquantidadeVagas) {
       return resposta.status(400).json({ mensagem: "Todos os campos prescisam estar preenchidos!" })
     };
 
-    evento.nome = NovoNome
-    evento.descricao = NovaDescricao
-    evento.local = NovoLocal
-    evento.data = NovaData
-    evento.horario = NovoHorario
-    evento.organizador = NovoOrganizador
-    evento.quantidadeVagas = NovaQuantidadeVagas
+    evento.nome = novoNome
+    evento.descricao = novaDescricao
+    evento.local = novoLocal
+    evento.data = novaData
+    evento.horario = novoHorario
+    evento.organizador = novoOrganizador
+    evento.quantidadeVagas = novaquantidadeVagas
     resposta.status(200).json({ mensagem: "Evento Editado com sucesso!" })
 
   } catch (error) {
