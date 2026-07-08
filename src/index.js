@@ -12,16 +12,16 @@ const port = process.env.PORTA;
 
 const eventos = []
 
-app.get("/", (requisicao,resposta) =>{
-try {
-  resposta.status(200).json({  
-  mensagem:"API funcionando com sucesso!", 
-  status: "ok", 
-  date: new Date ().toLocaleString("pt-BR", {timeZone: "America/Recife"}) 
-})
-} catch (error) {
-  resposta.status(500).json({ mensagem: "Erro ao subir o servidor!", erro: error.mensagem });
-}
+app.get("/", (requisicao, resposta) => {
+  try {
+    resposta.status(200).json({
+      mensagem: "API funcionando com sucesso!",
+      status: "ok",
+      date: new Date().toLocaleString("pt-BR", { timeZone: "America/Recife" })
+    })
+  } catch (error) {
+    resposta.status(500).json({ mensagem: "Erro ao subir o servidor!", erro: error.mensagem });
+  }
 
 })
 
@@ -61,7 +61,7 @@ app.post("/cadastrar", (requisicao, resposta) => {
 
     const dados = { codigo, nome, descricao, local, data, horario, organizador, quantidadeVagas }
 
-    if (!codigo || !nome || !organizador ) {
+    if (!codigo || !nome || !organizador) {
       return resposta.status(400).json({ mensagem: "Todos os campos são obrigatorios!" })
     }
     eventos.push(dados)
@@ -73,26 +73,26 @@ app.post("/cadastrar", (requisicao, resposta) => {
 });
 
 
-app.patch("/editar/:codigo", (requisicao, resposta) =>  {
+app.patch("/editar/:codigo", (requisicao, resposta) => {
   try {
     const codigo = requisicao.params.codigo
     const evento = eventos.find(evento => evento.codigo === codigo)
-    if(!evento){
-      return resposta.status(404).json({mensagem: "Evento não encontrado!"})
+    if (!evento) {
+      return resposta.status(404).json({ mensagem: "Evento não encontrado!" })
     }
-    const { novoNome,novaDescricao,novoLocal,novaData,novoHorario,novoOrganizador,novaquantidadeVagas} = requisicao.body
-  n
-    evento.nome = novoNome|| evento.nome
+    const { novoNome, novaDescricao, novoLocal, novaData, novoHorario, novoOrganizador, novaquantidadeVagas } = requisicao.body
+    n
+    evento.nome = novoNome || evento.nome
     evento.descricao = novaDescricao || evento.descricao
     evento.local = novoLocal || evento.local
-    evento.data = novaData ||  evento.data
+    evento.data = novaData || evento.data
     evento.horario = novoHorario || evento.horario
-    evento.organizador = novoOrganizador ||  evento.organizador
-    evento.quantidadeVagas = novaquantidadeVagas ||  evento.quantidadeVagas
+    evento.organizador = novoOrganizador || evento.organizador
+    evento.quantidadeVagas = novaquantidadeVagas || evento.quantidadeVagas
 
-    resposta.status(200).json({mensagem: "evento atualizado com sucesso!"})
+    resposta.status(200).json({ mensagem: "evento atualizado com sucesso!" })
   } catch (error) {
-    resposta.status(500).json({mensagem: "Erro ao editar evento!", erro: error})
+    resposta.status(500).json({ mensagem: "Erro ao editar evento!", erro: error })
   }
 })
 
