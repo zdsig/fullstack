@@ -41,8 +41,9 @@ class EventoController {
         try {
             const codigo = requisicao.params.codigo
             const { nome, descricao, local, data, horario, organizador, quantidadeVagas } = requisicao.body
-            const evento = EventoModell.editar(codigo, nome, descricao, local, data, horario, organizador, quantidadeVagas)
-            resposta.status(200).json({ mensagem: "evento atualizado com sucesso!" })
+            const evento = EventoModell.atualizarEvento(codigo, nome, descricao, local, data, horario, organizador, quantidadeVagas)
+            resposta.status(200).json(evento)
+
 
         } catch (error) {
 
@@ -51,9 +52,37 @@ class EventoController {
         }
     }
     static atualizarParcial(requisicao, resposta) {
+        try {
+            const codigo = requisicao.params.codigo
+            const { nome, descricao, local, data, horario, organizador, quantidadeVagas } = requisicao.body
+            const evento = EventoModell.editarParcial(nome, descricao, local, data, horario, organizador, quantidadeVagas)
+            resposta.status(200).json(evento)
+            
+        } catch (error) {
+             resposta.status(500).json({ mensagem: "Erro ao editar evento!", erro: error })
+        }
+    }
 
+    static excluirTodos(requisicao, resposta){
+        try {
+            EventoModell.excluirTodos()
+            resposta.status(200).json({mensagem: "Todos os eventos foram excluidos"})
 
+        } catch (error) {
+            resposta.status(500).json({ mensagem: "Erro ao excluir todos os evento!", erro: error })
+        }
+    }
+    static excluirPorCodigo(requisicao,resposta){
+        try {
+            // localhost:3000/listar/codigo
+            const codigo = requisicao.params.codigo
+            EventoModell.excluirPorCodigo()
+            resposta.status(200).json({mensagem: "Evento exclido com sucesso!"})
+        } catch (error) {
+            resposta.status(200).json({mensagem: "Erro ao excluir evento"})
+        }
     }
 }
 
 
+export default EventoController
