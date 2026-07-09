@@ -3,7 +3,7 @@ import eventos from "../../../config/database.js"
 class EventoModel {
     static cadastrar(codigo, nome, descricao, local, data, horario, organizador, quantidadeVagas) {
         const evento = { codigo, nome, descricao, local, data, horario, organizador, quantidadeVagas }
-        alunos.push(evento)
+        eventos.push(evento)
         return evento
     }
 
@@ -16,8 +16,8 @@ class EventoModel {
         return evento
     }
 
-    static editar(codigo, novoNome, novaDescricao, novoLocal, novaData, novoHorario, novoOrganizador, novaquantidadeVagas) {
-        const evento = EventoModel.listarPorCodigo(codigo)
+    static atualizarEvento(codigo, novoNome, novaDescricao, novoLocal, novaData, novoHorario, novoOrganizador, novaquantidadeVagas) {
+        const evento = EventoModel.listarPorCodigo(codigo) 
 
         if (!evento) {
             return null
@@ -50,7 +50,7 @@ class EventoModel {
 
         return evento
     }
-    static excluir(codigo) {
+    static excluirPorCodigo(codigo) {
         const index = eventos.findIndex(evento => evento.codigo === codigo)
 
         if (index === -1) {
@@ -60,6 +60,7 @@ class EventoModel {
         const eventoRemovido = eventos.splice(index, 1)
         return eventoRemovido[0]
     }
+
     static excluirTodos() {
         eventos.length = 0
     }

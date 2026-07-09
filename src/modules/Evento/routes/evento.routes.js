@@ -8,6 +8,6 @@ router.post("/cadastrar", EventoController.cadastrar)
 router.put("/editar/total/:codigo", EventoController.atualizarEvento)
 router.patch("/editar/parcial/:codigo", EventoController.atualizarParcial)
 router.delete("/excluir/:codigo", EventoController.excluirPorCodigo)
-router.delete("/excluir/todos", EventoController.excluirTodos)
+router.delete("/excluir", EventoController.excluirTodos)
 
 export default router 
